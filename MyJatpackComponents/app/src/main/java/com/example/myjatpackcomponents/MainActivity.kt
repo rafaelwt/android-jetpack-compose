@@ -7,13 +7,21 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -29,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -60,7 +69,7 @@ class MainActivity : ComponentActivity() {
                         MyTextField(myText.value, onValueChanged = {
                             myText.value = it
                         })
-                        MyButtonExample()
+                        MyProgressAdvance()
                     }
                 }
             }
@@ -69,8 +78,61 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyIcon () {
-    
+fun MyProgressAdvance() {
+    var progressStatus by rememberSaveable {
+        mutableStateOf(0f)
+    }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(
+            progress = progressStatus,
+        )
+        Row (modifier = Modifier.fillMaxWidth()){
+            Button(onClick = {
+                progressStatus += 0.1f
+            }) {
+                Text(text= "Increase Progress")
+
+            }
+            Button(onClick = {
+                progressStatus -= 0.1f
+            }) {
+                Text(text = "Decrease Progress")
+            }
+        }
+    }
+}
+
+@Composable
+fun MyProgress() {
+    var showLoading by remember {
+        mutableStateOf(true)
+    }
+    Column(
+        Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (showLoading) {
+            CircularProgressIndicator()
+            LinearProgressIndicator()
+        }
+        Button(onClick = {
+            showLoading = !showLoading
+        }) {
+            Text(text = "Toggle Progress")
+        }
+    }
+}
+
+@Composable
+fun MyIcon() {
+    Icon(imageVector = Icons.Default.Star, contentDescription = "Star Icon", tint = Color.Red)
 }
 
 @Composable
@@ -205,6 +267,6 @@ fun MyText() {
 @Composable
 fun GreetingPreview() {
     MyJatpackComponentsTheme {
-        MyImageAdvance()
+        MyIcon()
     }
 }
